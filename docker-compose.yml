@@ -1,0 +1,46 @@
+version: "3.8"
+
+services:
+   nginx:
+     build: requirements/nginx/.
+     container_name: nginx
+     image: nginx
+     ports:
+        - "443:443"
+     volumes:
+        - volumeWordPress:/var/www/html
+     networks:
+        inception:
+
+   wordpress:
+      build: requirements/wordpress/.
+      container_name: wordpress
+      image: wordpress
+      volumes:
+         - volumeWordPress:/var/www/html
+      networks:
+         inception:
+
+   mariadb:
+      build: requirements/mariadb/.
+      container_name: mariadb
+      image: mariadb
+      volumes:
+         - volumeDatabase:/var/lib/mysql
+      networks:
+         inception:
+
+volumes:
+  volumeWordPress:
+    driver_opts:
+      type: none
+      device: /home/ahajji/data/WordPress/
+      o: bind
+  #driver: /home/ahajji/data/WordPress/
+  volumeDatabase:
+    driver_opts:
+      type: none
+      device: /home/ahajji/data/Database/
+      o: bind
+networks:
+      inception:
